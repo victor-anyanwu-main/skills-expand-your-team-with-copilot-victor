@@ -889,28 +889,42 @@ document.addEventListener("DOMContentLoaded", () => {
   // Social sharing functions
   const COPY_SUCCESS_MESSAGE = "Link copied to clipboard! Share it with your friends.";
 
+  function getCurrentPageUrl() {
+    return window.location.href;
+  }
+
+  function sanitizeDescription(description) {
+    // Limit description length for sharing and remove any HTML tags
+    const maxLength = 200;
+    const cleanDescription = description.replace(/<[^>]*>/g, '');
+    return cleanDescription.length > maxLength 
+      ? cleanDescription.substring(0, maxLength) + '...'
+      : cleanDescription;
+  }
+
   function shareOnTwitter(activityName, details) {
-    const text = `Check out ${activityName} at Mergington High School! ${details.description}`;
-    const url = window.location.href;
+    const safeDescription = sanitizeDescription(details.description);
+    const text = `Check out ${activityName} at Mergington High School! ${safeDescription}`;
+    const url = getCurrentPageUrl();
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   }
 
   function shareOnFacebook(activityName, details) {
-    const url = window.location.href;
+    const url = getCurrentPageUrl();
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
     window.open(facebookUrl, '_blank', 'width=600,height=400');
   }
 
   function shareViaEmail(activityName, details) {
     const subject = `Join ${activityName} at Mergington High School`;
-    const body = `Hi!\n\nI wanted to share this activity with you:\n\n${activityName}\n${details.description}\n\nSchedule: ${formatSchedule(details)}\n\nCheck it out here: ${window.location.href}`;
+    const body = `Hi!\n\nI wanted to share this activity with you:\n\n${activityName}\n${details.description}\n\nSchedule: ${formatSchedule(details)}\n\nCheck it out here: ${getCurrentPageUrl()}`;
     const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoUrl;
   }
 
   function copyActivityLink(activityName) {
-    const url = window.location.href;
+    const url = getCurrentPageUrl();
     
     // Use the Clipboard API if available
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -931,8 +945,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function fallbackCopyLink(url) {
     const textArea = document.createElement("textarea");
     textArea.value = url;
-    textArea.style.position = "fixed";
-    textArea.style.left = "-999999px";
+    textArea.style.position = "absolute";
+    textArea.style.left = "-9999px";
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();

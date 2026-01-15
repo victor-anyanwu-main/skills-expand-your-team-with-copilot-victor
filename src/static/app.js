@@ -920,8 +920,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function shareViaEmail(activityName, details) {
+    const safeDescription = sanitizeDescription(details.description);
     const subject = `Join ${activityName} at Mergington High School`;
-    const body = `Hi!\n\nI wanted to share this activity with you:\n\n${activityName}\n${details.description}\n\nSchedule: ${formatSchedule(details)}\n\nCheck it out here: ${getCurrentPageUrl()}`;
+    const body = `Hi!\n\nI wanted to share this activity with you:\n\n${activityName}\n${safeDescription}\n\nSchedule: ${formatSchedule(details)}\n\nCheck it out here: ${getCurrentPageUrl()}`;
     const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoUrl;
   }

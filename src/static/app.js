@@ -896,7 +896,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function sanitizeDescription(description) {
     // Limit description length for sharing and remove any HTML tags
     const maxLength = 200;
-    const cleanDescription = description.replace(/<[^>]*>/g, '');
+    // Create a temporary DOM element to safely strip HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.textContent = description;
+    const cleanDescription = tempDiv.textContent;
     return cleanDescription.length > maxLength 
       ? cleanDescription.substring(0, maxLength) + '...'
       : cleanDescription;

@@ -524,17 +524,17 @@ document.addEventListener("DOMContentLoaded", () => {
       <h4>${name}</h4>
       <p>${details.description}</p>
       <div class="share-buttons">
-        <button class="share-btn share-twitter" data-activity="${name}" title="Share on Twitter">
-          <span class="share-icon">🐦</span>
+        <button class="share-btn share-twitter" data-activity="${name}" title="Share on Twitter" aria-label="Share on Twitter">
+          <span class="share-icon" aria-hidden="true">🐦</span>
         </button>
-        <button class="share-btn share-facebook" data-activity="${name}" title="Share on Facebook">
-          <span class="share-icon">👍</span>
+        <button class="share-btn share-facebook" data-activity="${name}" title="Share on Facebook" aria-label="Share on Facebook">
+          <span class="share-icon" aria-hidden="true">👍</span>
         </button>
-        <button class="share-btn share-email" data-activity="${name}" title="Share via Email">
-          <span class="share-icon">✉️</span>
+        <button class="share-btn share-email" data-activity="${name}" title="Share via Email" aria-label="Share via Email">
+          <span class="share-icon" aria-hidden="true">✉️</span>
         </button>
-        <button class="share-btn share-copy" data-activity="${name}" title="Copy Link">
-          <span class="share-icon">🔗</span>
+        <button class="share-btn share-copy" data-activity="${name}" title="Copy Link" aria-label="Copy Link">
+          <span class="share-icon" aria-hidden="true">🔗</span>
         </button>
       </div>
       <p class="tooltip">
@@ -887,6 +887,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Social sharing functions
+  const COPY_SUCCESS_MESSAGE = "Link copied to clipboard! Share it with your friends.";
+
   function shareOnTwitter(activityName, details) {
     const text = `Check out ${activityName} at Mergington High School! ${details.description}`;
     const url = window.location.href;
@@ -914,7 +916,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url)
         .then(() => {
-          showMessage("Link copied to clipboard! Share it with your friends.", "success");
+          showMessage(COPY_SUCCESS_MESSAGE, "success");
         })
         .catch(() => {
           // Fallback to the older method
@@ -937,7 +939,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     try {
       document.execCommand('copy');
-      showMessage("Link copied to clipboard! Share it with your friends.", "success");
+      showMessage(COPY_SUCCESS_MESSAGE, "success");
     } catch (err) {
       showMessage("Unable to copy link. Please copy manually: " + url, "error");
     }
